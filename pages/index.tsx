@@ -1,4 +1,4 @@
-import type { GetServerSideProps, NextPage } from 'next';
+import type { GetServerSideProps, GetStaticProps, NextPage } from 'next';
 import { readFileSync, readdirSync } from 'fs';
 import matter from 'gray-matter';
 import React from 'react';
@@ -9,9 +9,8 @@ interface PageProps {
   posts: Post[];
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const posts = readdirSync('./__posts').map((file) => {
-    console.log(file.slice(0, -3));
     const post = readFileSync(`./__posts/${file}`, 'utf-8');
     return matter(post).data;
   });

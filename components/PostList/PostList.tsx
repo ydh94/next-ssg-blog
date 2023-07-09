@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Post } from '../../types';
 import classNames from 'classnames/bind';
 import sc from './index.module.scss';

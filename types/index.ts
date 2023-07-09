@@ -5,5 +5,5 @@ export interface Post {
   slug: string;
   tags: string[];
   title: string;
-  id: number;
+  id: string;
 }

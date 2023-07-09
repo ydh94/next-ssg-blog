@@ -1,23 +1,46 @@
 import { readFileSync, readdirSync } from 'fs';
 import matter from 'gray-matter';
-import React from 'react';
+import { GetStaticPropsContext, InferGetStaticPropsType, NextPage } from 'next';
+import convertMarkdownToHtml from '../util/convertMarkdownToHtml';
 
-// export async function getServerSideProps({ params }) {
-//   // console.log(params.postId);
-//   const posts = readdirSync('./__posts').map((file) => {
-//     const content = readFileSync(`./__posts/${file}`, 'utf-8');
-//     return matter(content).data;
-//   });
+export const getStaticPaths = async () => {
+  const paths = readdirSync('./__posts')
+    .map((post) => post.slice(0, -3))
+    .map((id) => ({
+      params: {
+        postId: String(id),
+      },
+    }));
 
-//   console.log(posts);
+  return {
+    paths,
+    fallback: false,
+  };
+};
 
-//   return {
-//     props: { posts },
-//   };
-// }
+export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
+  const post = readFileSync(`./__posts/${params?.postId}.md`, 'utf-8');
 
-const PostDetailPage = () => {
-  return <div></div>;
+  const { data, content } = matter(post);
+
+  return {
+    props: { meta: data, content: await convertMarkdownToHtml(content) },
+  };
+};
+
+const PostDetailPage: NextPage<
+  InferGetStaticPropsType<typeof getStaticProps>
+> = ({ meta, content }) => {
+  return (
+    <div>
+      {meta.title}
+      <div
+        dangerouslySetInnerHTML={{
+          __html: content,
+        }}
+      />
+    </div>
+  );
 };
 
 export default PostDetailPage;
