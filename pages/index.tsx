@@ -1,4 +1,4 @@
-import type { GetServerSideProps, GetStaticProps, NextPage } from 'next';
+import type { GetStaticProps, NextPage } from 'next';
 import { readFileSync, readdirSync } from 'fs';
 import matter from 'gray-matter';
 import React from 'react';

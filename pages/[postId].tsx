@@ -2,6 +2,11 @@ import { readFileSync, readdirSync } from 'fs';
 import matter from 'gray-matter';
 import { GetStaticPropsContext, InferGetStaticPropsType, NextPage } from 'next';
 import convertMarkdownToHtml from '../util/convertMarkdownToHtml';
+import Head from 'next/head';
+import hljs from 'highlight.js';
+import { useEffect } from 'react';
+
+import 'highlight.js/styles/github-dark.css';
 
 export const getStaticPaths = async () => {
   const paths = readdirSync('./__posts')
@@ -31,9 +36,15 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
 const PostDetailPage: NextPage<
   InferGetStaticPropsType<typeof getStaticProps>
 > = ({ meta, content }) => {
+  useEffect(() => {
+    hljs.highlightAll();
+  }, []);
+
   return (
     <div>
-      {meta.title}
+      <Head>
+        <title>{meta.title}</title>
+      </Head>
       <div
         dangerouslySetInnerHTML={{
           __html: content,
