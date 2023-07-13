@@ -3,7 +3,7 @@ import matter from 'gray-matter';
 import React from 'react';
 import PostList from '../components/PostList/PostList';
 
-export const getPostListData = async () => {
+const getPostListData = async () => {
   const posts = readdirSync('./__posts').map((file) => {
     const post = readFileSync(`./__posts/${file}`, 'utf-8');
     return matter(post).data;
