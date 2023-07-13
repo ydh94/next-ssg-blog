@@ -1,8 +1,8 @@
 import { readFileSync, readdirSync } from 'fs';
 import matter from 'gray-matter';
 
-import convertMarkdownToHtml from '../../../util/convertMarkdownToHtml';
-import PostDetailContent from '../../components/PostDetailContent';
+import convertMarkdownToHtml from '../../util/convertMarkdownToHtml';
+import PostDetailContent from '../components/PostDetailContent';
 
 type Params = {
   params: {
@@ -14,15 +14,13 @@ export const generateStaticParams = async () => {
   const paths = readdirSync('./__posts')
     .map((post) => post.slice(0, -3))
     .map((id) => ({
-      params: {
-        postId: String(id),
-      },
+      postId: String(id),
     }));
 
   return paths;
 };
 
-export const getPostDetailData = async (postId: number) => {
+const getPostDetailData = async (postId: number) => {
   const post = readFileSync(`./__posts/${postId}.md`, 'utf-8');
   const { data, content } = matter(post);
 
